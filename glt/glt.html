@@ -1,0 +1,69 @@
+Requirement:Unity 2020.
+<ol>
+  <li>Premade assets preparation:
+    <ol>
+      <li>Create a new asset bundle name (as shown in 1.box).
+        <img src="s1.png" alt="">
+        And create a folder named your new mod(Recommended) (e.g. Test/HudedTutorial (in the last screenshot shown)).
+      </li>
+      <li>
+        Create your assets and assign them to the current asset bundle in your editor.
+        Like this:
+        <img src="s0.png" alt="">
+      </li>
+      <li>Copy the code:
+
+        #if UNITY_EDITOR
+        using System.IO;
+        using UnityEditor;
+        using UnityEngine;
+
+        public class Packer : EditorWindow
+        {
+        [MenuItem("Window/Pack AssetBundles")]
+        private static void ShowWindow()
+        {
+        GetWindow<Packer>().Show();
+          }
+          public string path => "AssetBundles";
+          BuildAssetBundleOptions options = BuildAssetBundleOptions.None;
+          BuildTarget buildTarget = BuildTarget.StandaloneWindows64;
+          private void OnGUI()
+          {
+          options = (BuildAssetBundleOptions)EditorGUILayout.EnumPopup("BuildAssetBundleOptions:", options);
+          buildTarget = (BuildTarget)EditorGUILayout.EnumPopup("BuildTarget:", buildTarget);
+          if (GUILayout.Button("Build"))
+          {
+          if (!Directory.Exists(path))
+          {
+          Directory.CreateDirectory(path);
+          }
+          BuildPipeline.BuildAssetBundles(path, options, buildTarget);
+          }
+          }
+          }
+          #endif
+
+          and paste it into a script file in your editor.</li>
+      <li>Find the button at the top of the window(Window>Pack AssetBundle).
+        (In 2.box)
+        <img src="s2.png" alt="">
+      </li>
+      <li>Click the build button.</li>
+      <li>Open folder. ((your project)/AssetBundles)
+        <img src="s3.png" alt="">
+      </li>
+    </ol>
+  </li>
+  <li>Asset loading in game
+    <ol>
+      <li>Load asset bundle: AssetBundle.LoadFromFile(string path);.</li>
+      <li>Load asset: AssetBundle.LoadAsset(string name);.</li>
+    </ol>
+  </li>
+</ol>
+That's all! Congratulations,you finished the tutorial!
+More
+<a href="https://docs.unity3d.com/2020.3/Documentation/ScriptReference/AssetBundle.html">
+  code references.
+</a>
